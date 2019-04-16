@@ -1,5 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:open_source_china/contants/app_colors.dart';
+import 'package:open_source_china/contants/app_url_info.dart';
+import 'package:open_source_china/contants/event_bus.dart';
+import 'package:open_source_china/pages/LoginPage.dart';
+import 'package:open_source_china/utils/data_utils.dart';
+import 'package:open_source_china/utils/net_utils.dart';
 import 'package:open_source_china/widget/list_item.dart';
 
 class MinePages extends StatefulWidget {
@@ -27,6 +34,43 @@ class _MinePagesState extends State<MinePages> {
     Icons.wallpaper,
   ];
 
+  var userAvatar;
+  var userName;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    eventBus.on<LoginEvent>().listen((_) {
+      print("收到通知");
+      _getUserInfo();
+    });
+  }
+
+  _getUserInfo() {
+    DataUtils.getAccessToken().then((accessToken) {
+      if (accessToken == null || accessToken.length == 0) {
+        return;
+      }
+
+      Map<String, dynamic> params = Map<String, dynamic>();
+      params['access_token'] = accessToken;
+      params['dataType'] = 'json';
+      print('accessToken: $accessToken');
+      NetUtils.get(AppUrls.OPENAPI_USER, params).then((data) {
+        print('data: $data');
+        Map<String, dynamic> map = json.decode(data);
+        if (mounted) {
+          setState(() {
+            userAvatar = map['avatar'];
+            userName = map['name'];
+          });
+        }
+        DataUtils.saveUserInfo(map);
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -38,7 +82,7 @@ class _MinePagesState extends State<MinePages> {
               }
               index -= 1;
               return InkWell(
-                onTap: (){
+                onTap: () {
                   print(title[index]);
                 },
                 child: ListItemInfo(
@@ -55,6 +99,12 @@ class _MinePagesState extends State<MinePages> {
     );
   }
 
+  void jumpToLgoin() async {
+    var result = await Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => LogingPage()));
+    print("登录页面返回了"+result);
+  }
+
   Widget createHeadView() {
     return Container(
       padding: EdgeInsets.only(top: 60, bottom: 60),
@@ -63,25 +113,42 @@ class _MinePagesState extends State<MinePages> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           GestureDetector(
-            onTap: (){
-              print("ddd");
+            onTap: () {
+              if (userAvatar == null) {
+                jumpToLgoin();
+              }
             },
-            child: Container(
-              width: 60,
-              height: 60,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(width: 2, color: AppColors.Colfff),
-                image: DecorationImage(
-                  image:AssetImage("assets/images/default_head.png"),
-                  fit: BoxFit.cover
-                ),
-              ),
-
-            ),
+            child: userAvatar == null
+                ? Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(width: 2, color: AppColors.Colfff),
+                      image: DecorationImage(
+                          image: AssetImage("assets/images/default_head.png"),
+                          fit: BoxFit.cover),
+                    ),
+                  )
+                : Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(width: 2, color: AppColors.Colfff),
+                      image: DecorationImage(
+                          image: NetworkImage(userAvatar),
+                          fit: BoxFit.cover),
+                    ),
+                  ),
           ),
-          SizedBox(height: 15,),
-          Text("点击头像登录",style: TextStyle(color: AppColors.Colfff),)
+          SizedBox(
+            height: 15,
+          ),
+          Text(
+            userName ??= "点击头像登录",
+            style: TextStyle(color: AppColors.Colfff),
+          )
         ],
       ),
     );
