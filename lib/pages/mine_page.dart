@@ -5,6 +5,7 @@ import 'package:open_source_china/contants/app_colors.dart';
 import 'package:open_source_china/contants/app_url_info.dart';
 import 'package:open_source_china/contants/event_bus.dart';
 import 'package:open_source_china/pages/LoginPage.dart';
+import 'package:open_source_china/pages/mine_detail_page.dart';
 import 'package:open_source_china/utils/data_utils.dart';
 import 'package:open_source_china/utils/net_utils.dart';
 import 'package:open_source_china/widget/list_item.dart';
@@ -41,9 +42,27 @@ class _MinePagesState extends State<MinePages> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _showUerInfo();
     eventBus.on<LoginEvent>().listen((_) {
       print("收到通知");
       _getUserInfo();
+    });
+  }
+
+  _showUerInfo() {
+    //
+    DataUtils.getUserInfo().then((user) {
+      if (mounted) {
+        setState(() {
+          if (user != null) {
+            userAvatar = user.avatar;
+            userName = user.name;
+          } else {
+            userAvatar = null;
+            userName = null;
+          }
+        });
+      }
     });
   }
 
@@ -116,6 +135,8 @@ class _MinePagesState extends State<MinePages> {
             onTap: () {
               if (userAvatar == null) {
                 jumpToLgoin();
+              }else{
+                Navigator.of(context).push(MaterialPageRoute(builder: (context)=>MyDetailPage()));
               }
             },
             child: userAvatar == null
