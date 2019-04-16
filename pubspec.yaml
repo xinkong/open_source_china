@@ -45,6 +45,7 @@ flutter:
     - assets/images/ic_nav_my_pressed.png
     #抽屉背景
     - assets/images/cover_img.jpg
+    - assets/images/default_head.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

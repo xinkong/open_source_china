@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:open_source_china/pages/drawer/about_page.dart';
 import 'package:open_source_china/pages/drawer/send_tweet_page.dart';
 import 'package:open_source_china/pages/drawer/setting_page.dart';
+import 'package:open_source_china/pages/drawer/star_anim.dart';
 import 'package:open_source_china/pages/drawer/tweet_bleak_hose_page.dart';
 
 class MyDrawer extends StatelessWidget {
@@ -9,7 +10,8 @@ class MyDrawer extends StatelessWidget {
   final List title;
   final List icons;
 
-  MyDrawer({@required this.headPicPath, @required this.title, @required this.icons});
+  MyDrawer(
+      {@required this.headPicPath, @required this.title, @required this.icons});
 
   @override
   Widget build(BuildContext context) {
@@ -30,27 +32,25 @@ class MyDrawer extends StatelessWidget {
               onTap: () {
                 switch (index) {
                   case 0:
-                  //PublishTweetPage
                     _navPush(context, SendTweetPages());
                     break;
                   case 1:
-                  //TweetBlackHousePage
                     _navPush(context, TweetBleakHosePages());
                     break;
                   case 2:
-                  //AboutPage
                     _navPush(context, AboutPages());
                     break;
                   case 3:
-                  //SettingsPage
                     _navPush(context, SettingPages());
+                    break;
+                  case 4:
+                    _navPush(context, StarView());
                     break;
                 }
               },
-
             );
           },
-          separatorBuilder: (contenxt,index){
+          separatorBuilder: (contenxt, index) {
             if (index == 0) {
               return Divider(
                 height: 0.0,

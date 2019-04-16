@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           title: Text(
             _appBarTitle[_currentIndex],
-            style: TextStyle(color: Color(AppColors.Colfff), fontSize: 20),
+            style: TextStyle(color: AppColors.Colfff, fontSize: 20),
           ),
         ),
         body: PageView.builder(
@@ -83,7 +83,7 @@ class _HomePageState extends State<HomePage> {
         ),
         drawer: MyDrawer(
             headPicPath: 'assets/images/cover_img.jpg',
-            title:  ['发布动弹', '动弹小黑屋', '关于', '设置'],
-            icons: [Icons.send, Icons.home, Icons.error, Icons.settings],));
+            title:  ['发布动弹', '动弹小黑屋', '关于', '设置','动画爱心'],
+            icons: [Icons.send, Icons.home, Icons.error, Icons.settings,Icons.star],));
   }
 }
