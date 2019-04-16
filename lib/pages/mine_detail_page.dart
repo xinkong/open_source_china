@@ -65,10 +65,10 @@ class _MyDetailPageState extends State<MyDetailPage> {
         title: Text(
           '我的资料',
           style: TextStyle(
-            color: AppColors.AppTheme,
+            color: AppColors.Colfff,
           ),
         ),
-        iconTheme: IconThemeData(color: AppColors.AppTheme,),
+        iconTheme: IconThemeData(color: AppColors.Colfff,),
       ),
       body: buildSingleChildScrollView(),
     );
