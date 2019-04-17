@@ -5,6 +5,7 @@ import 'package:open_source_china/contants/app_colors.dart';
 import 'package:open_source_china/contants/app_url_info.dart';
 import 'package:open_source_china/contants/event_bus.dart';
 import 'package:open_source_china/pages/LoginPage.dart';
+import 'package:open_source_china/pages/message_info_oage.dart';
 import 'package:open_source_china/pages/mine_detail_page.dart';
 import 'package:open_source_china/utils/data_utils.dart';
 import 'package:open_source_china/utils/net_utils.dart';
@@ -103,6 +104,7 @@ class _MinePagesState extends State<MinePages> {
               return InkWell(
                 onTap: () {
                   print(title[index]);
+                  jumpToOtherPage(title[index]);
                 },
                 child: ListItemInfo(
                     leftIcon: iconInfo[index],
@@ -173,5 +175,15 @@ class _MinePagesState extends State<MinePages> {
         ],
       ),
     );
+  }
+
+  void jumpToOtherPage(String title) {
+
+    switch(title){
+      case "我的消息":
+        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>MessageInfo()));
+        break;
+    }
+
   }
 }
